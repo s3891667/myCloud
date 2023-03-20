@@ -11,8 +11,10 @@ def awsCloud():
                           aws_access_key_id='AKIAZ2A4PAUCTGBJCSXX',
                           aws_secret_access_key='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')
     response = dynamodb.list_tables()
-    print(response)
+    return response
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return render(request,'myCloud/index.html',{
+        'data': awsCloud()
+        })
 

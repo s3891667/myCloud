@@ -7,3 +7,7 @@ dynamodb = boto3.client('dynamodb', region_name='us-east-1',
 response = dynamodb.list_tables()
 
 print(response)
+
+
+
+
