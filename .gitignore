@@ -2,3 +2,4 @@
 ./myCloudEnv
 ./cloudApp/*
 mydatabase
+.DJANGO_SECRET_KEY

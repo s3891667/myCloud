@@ -9,5 +9,11 @@ response = dynamodb.list_tables()
 print(response)
 
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+test = os.getenv('region')
+
+print(test)
 
 
