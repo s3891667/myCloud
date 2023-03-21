@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <head>
+            {% load static %}
+            <!--<link rel="stylesheet" href="{% static 'mycrypt/css/style.css' %}">-->
+            <title>MyCloud</title>
+        </head>
+    </head>
+    <body>
+        <form method="POST">
+            <label for="email">Email:</label>
+            <br>
+            <input type="email" id="email" name="email">
+            <br>
+            <label for="fname">First name:</label>
+            <br>
+            <input type="text" id="fname" name="fname">
+            <br>
+            <label for="lname">Last name:</label>
+            <br>
+            <input type="text" id="lname" name="lname">
+            <input class="button" type="submit" name="Register" value="Register">
+        </form>
+        <h3>
+            <a href="{% url 'myCloud:login' %}"> Or login
+            </h3>
+        </body>
+    </html>

@@ -6,15 +6,25 @@ load_dotenv()
 from django.http import HttpResponse
 
 
-def awsCloud():
-    dynamodb = boto3.client('dynamodb', region_name='us-east-1',
-                          aws_access_key_id='AKIAZ2A4PAUCTGBJCSXX',
-                          aws_secret_access_key='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')
-    response = dynamodb.list_tables()
-    return response
 
 def index(request):
     return render(request,'myCloud/index.html',{
         'data': awsCloud()
         })
 
+
+def login(request):
+    return render(request, 'myCloud/login.html')
+
+
+def signUp(request):
+    if request.method =='POST':
+        fname =request.POST.get('fname')
+        lname = request.POST.get('lname')
+        email = request.POST.get('email')
+        
+
+    return render(request,'myCloud/signUp.html')
+
+def home(request):
+    return render(request, 'myCloud/home.html')
