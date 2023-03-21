@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "dynamodb_sessions"
 ]
 
 MIDDLEWARE = [
@@ -90,12 +89,6 @@ DATABASES = {
     }
 }
 
-# SESSION_ENGINE = 'dynamodb_sessions.backends.dynamodb'
-
-# DYNAMODB_SESSIONS_AWS_ACCESS_KEY_ID = os.getenv('aws_access_key_id')
-# DYNAMODB_SESSIONS_AWS_SECRET_ACCESS_KEY = os.getenv('aws_secret_access_key')
-# DYNAMODB_SESSIONS_TABLE_NAME = os.getenv('table')
-# DYNAMODB_SESSIONS_AWS_REGION_NAME: os.getenv('region') 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

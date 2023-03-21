@@ -1,4 +1,4 @@
 .env
-./myCloudEnv
+myCloudEnv
 mydatabase
 .DJANGO_SECRET_KEY
