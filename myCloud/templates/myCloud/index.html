@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <head>
-            {% load static %}
-            <!--<link rel="stylesheet" href="{% static 'mycrypt/css/style.css' %}">-->
-            <title>MyCloud</title>
-        </head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'myCloud/style.css' %}">
     </head>
     <body>
-        <h1>{{ data }}</h1>
+        <nav>
+            <div class="nav-link" id="navlink">
+                <ul>
+                    <li class="nav-button">
+                        <a href="{% url 'myCloud:home' %}">MyCloud</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'myCloud:logout' %}">Logout</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'myCloud:login' %}">Login</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'myCloud:signUp' %}">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% block content %}<h1>Welcome to MyCloud</h1>{% endblock %}
     </body>
 </html>

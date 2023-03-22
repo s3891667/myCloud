@@ -33,7 +33,7 @@ except KeyError as e:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.236.25.75','0.0.0.0']
+ALLOWED_HOSTS = ['54.236.25.75','0.0.0.0','127.0.0.1']
 
 
 # Application definition
