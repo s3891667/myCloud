@@ -1,0 +1,108 @@
+{% extends 'myCloud/index.html' %}
+{% block content %}
+    <h1>Songs List</h1>
+    <h1>{{ bucket }}</h1>
+    <table>
+        <tr>
+            <th>Picture</th>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Subcribe</th>
+        </tr>
+        {% for song in songs %}
+            <tr>
+                <td id="testing">
+                    <img class="song-image"  id="{{ song.artist }}"  />
+                </td>
+                <td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
+                <td>{{ song.title }}</td>
+                <td>
+                    <form method = "POST">
+                        {% csrf_token %}
+                        <button type="submit" name="song" value='{{ song.title }}'>Subcribe</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <nav>
+        <ul >
+            <li >
+                <a onclick="" href="?page=1">First</a>
+            </li>
+            <li >
+                {% if songs.has_previous %}
+                    <a onclick=""
+                       href="?page={{ songs.previous_page_number }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                {% endif %}
+            </li>
+            {% for i in songs.paginator.page_range %}
+                <li >
+                    <a onclick=""  href="?page={{i}}">{{i }}</a>
+                </li>
+            {% endfor %}
+            <li >
+                {% if songs.has_next %}
+                    <a onclick=""
+                       href="?page={{ songs.next_page_number }}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                {% endif %}
+            </li>
+            <li>
+                <a onclick="" href="?page={{ songs.paginator.num_pages }}">Last</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+{% block feature %}
+    <script>
+	async function fetchImg() {
+		const images = document.querySelectorAll('.song-image');
+		images.forEach(image => {
+			const title = image.getAttribute('id');
+			const url = `https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist=${encodeURIComponent(title)}`;
+			fetch(url, { mode: 'cors' })
+				.then(response => {
+					if (response.ok) {
+						return response.body;
+					}
+					throw new Error('Network response was not ok');
+				})
+				.then(body => {
+					const reader = body.getReader();
+					const stream = new ReadableStream({
+						start(controller) {
+							function push() {
+								reader.read().then(({ done, value }) => {
+									if (done) {
+										controller.close();
+										return;
+									}
+									controller.enqueue(value);
+									push();
+								});
+							}
+							push();
+						}
+					});
+					return new Response(stream, { headers: { "Content-Type": "text/html" } })
+						.text();
+				})
+				.then(url => {
+					image.src = url;
+				})
+				.catch(error => console.error(error));
+		});
+	}
+	document.addEventListener('DOMContentLoaded', () => {
+		fetchImg();
+	});
+    </script>
+{% endblock %}

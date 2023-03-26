@@ -1,0 +1,46 @@
+{% extends 'myCloud/musics.html' %}
+{% block content %}
+    {% comment %}{% for song in songs %}{% endcomment %}
+    {% comment %}<tr>{% endcomment %}
+    {% comment %}<td id="testing">{% endcomment %}
+    {% comment %}<img class="song-image"  id="{{ song.artist }}"  />{% endcomment %}
+    {% comment %}</td>{% endcomment %}
+    {% comment %}<td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>{% endcomment %}
+    {% comment %}<td>{{ song.title }}</td>{% endcomment %}
+    {% comment %}<td>{% endcomment %}
+    {% comment %}<form method = "POST">{% endcomment %}
+    {% comment %}{% csrf_token %}{% endcomment %}
+    {% comment %}
+<button type="submit"{% endcomment %} {% comment %}name="song"{% endcomment %} {% comment %}value='{ "title": "{{ song.title }}", "year": "{{ song.year }}" }'>
+Remove</button>{% endcomment %}
+{% comment %}</form>{% endcomment %}
+{% comment %}</td>{% endcomment %}
+{% comment %}</tr>{% endcomment %}
+{% comment %}{% endfor %}{% endcomment %}
+<table>
+<tr>
+<th>Picture</th>
+<th>Artist</th>
+<th>Title</th>
+<th>Year</th>
+<th>Remove</th>
+</tr>
+{% for song in songs %}
+<tr>
+<td id="testing">
+<img class="song-image"  id="{{ song.artist }}"  />
+</td>
+<td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
+<td>{{ song.title }}</td>
+<td>{{ song.year }}</td>
+<td>
+<form method = "POST">
+{% csrf_token %}
+<button type="submit" name="song" value='{ "title": "{{ song.title }}", "year": "{{ song.year }}" }'>Remove</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+{% block feature %}{{ block.super }}{% endblock %}

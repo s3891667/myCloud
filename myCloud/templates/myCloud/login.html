@@ -1,1 +1,17 @@
 {% extends 'myCloud/index.html' %}
+{% block content %}
+    <h1>Login form</h1>
+    <h2>{{ message }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <br>
+        <input type="email" id="email" name="email">
+        <br>
+        <label for="pw">Password:</label>
+        <br>
+        <input type="password" id="pw" name="pw">
+        <br>
+        <input class="button" type="submit" name="login" value="login">
+    </form>
+{% endblock %}
