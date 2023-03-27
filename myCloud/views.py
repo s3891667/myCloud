@@ -24,15 +24,6 @@ def restructureData(songs, names):
     return final_data
 
 
-def fetchImg(data):
-    artistList = {}
-    for value in data:
-        res = requests.get(
-            'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist='+value['artist'])
-        artistList[value['artist']] = res.text
-    return artistList
-
-
 def apiGateWay(email, password):
     url = 'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/rmit/?student=' + email
     headers = {
@@ -106,6 +97,19 @@ def logout(request):
     return redirect('/myCloud/login/')
 
 
+def addingSong(data, user_email):
+    title = data['title']
+    year = data['year']
+    url = 'https://qd7wgwpns8.execute-api.us-east-1.amazonaws.com/updateSubscription/'
+    # now  we will call an api with the attribute song thereby interacting and add it into the users vaforite map
+    response = requests.post(url, json={
+        "song": title,
+        "user_email": user_email,
+        "year": year
+    })
+    return response
+
+
 def musics(request):
     # this area will display everything, such as images and its information
     # User will allow to subscribe the the music thereby I will display in their section
@@ -115,17 +119,8 @@ def musics(request):
     else:
         if request.method == 'POST':
             data = json.loads(request.POST.get('song'))
-            title = data['title']
-            year = data['year']
-            # now  we will call an api with the attribute song thereby interacting and add it into the users vaforite map
             user_email = request.session['user_email']
-            print(user_email)
-            url = 'https://qd7wgwpns8.execute-api.us-east-1.amazonaws.com/updateSubscription/'
-            response = requests.post(url, json={
-                "song": title,
-                "user_email": user_email,
-                "year": year
-            })
+            addingSong(data, user_email)
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table('music')
         data = [table.scan()][0]['Items']
@@ -145,8 +140,13 @@ def subscription(request):
     if 'user' not in request.session:
         return redirect('/myCloud/login/')
     if request.method == 'POST':
-        song_title = request.POST.get('song')
-        url = ''
+        song_title = json.loads(request.POST.get('song'))['title']
+        user_email = request.session['user_email']
+        url = 'https://u1gz12fny5.execute-api.us-east-1.amazonaws.com/removeSong/'
+        response = requests.post(url, json={
+            "songTitle": song_title.replace(" ", "_"),
+            "userEmail": user_email
+        })
 
     user = request.session['user_email']
     url = 'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/rmit/?student='+user
@@ -172,4 +172,45 @@ def subscription(request):
 def query(request):
     if 'user' not in request.session:
         return redirect('/myCloud/login/')
-    return render(request, "myCloud/query.html")
+    current_user = request.session['user']
+    if request.method == 'POST':
+        if 'query' in request.POST:
+            title = request.POST.get('title')
+            year = request.POST.get('year')
+            artist = request.POST.get('artist')
+            data = {
+                "title": title,
+                "year": year,
+                "artist": artist
+            }
+            url = 'https://118tvo0o7g.execute-api.us-east-1.amazonaws.com/querying'
+            response = requests.post(url, json=data)
+
+            value = response.text
+            song = (json.loads(value)['body'])
+            if (type(song) == list):
+                artist_retrieved = song[0]['artist']
+                img_url = f'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist={artist_retrieved}'
+                img = requests.get(img_url)
+                return render(request, "myCloud/query.html", {
+                    "current_user": current_user,
+                    "songs": song,
+                    "img": img.text
+                })
+            return render(request, "myCloud/query.html", {
+                "current_user": current_user,
+                "mess": song
+            })
+
+        else:
+            data = json.loads(request.POST.get('song'))
+            user_email = request.session['user_email']
+            response_data = addingSong(data, user_email)
+            print(response_data)
+            return render(request, "myCloud/query.html", {
+                "current_user": current_user,
+                "mess": json.loads(response_data.text)['body']
+            })
+    return render(request, "myCloud/query.html", {
+        "current_user": current_user
+    })

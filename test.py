@@ -12,7 +12,6 @@ load_dotenv()
 
 file = open('./a1.json', 'r')
 data = json.loads(file.read())
-songs = data['songs']
 
 
 def create_table(songs):
@@ -59,6 +58,20 @@ def createItem(songs):
 
 # createItem(songs)
 
+# for value in songs:
+    # print(value['artist'])
+
+song = "#40"
+formatted_string = f":{song}"
+print(formatted_string)
+
+# if (type(string1) == str):
+# print("yess")
+# if string1 != string2:
+# print("The strings are not equal")
+# else:
+# print("The strings are equal")
+
 
 def download(songs):
     folder_path = "./musicImgs"
@@ -82,4 +95,6 @@ def uploadingFiles(songs):
         file_path = os.path.join(folder_path, filename)
         if os.path.isfile(file_path):
             response = s3_client.upload_file(file_path, bucket, filename)
+
+
 # uploadingFiles(songs)

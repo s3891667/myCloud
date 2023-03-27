@@ -1,11 +1,46 @@
 {% extends 'myCloud/musics.html' %}
-
 {% block content %}
-
+    <form method="POST">
+        {% csrf_token %}
+        <label for="title">Title</label>
+        <br>
+        <input type="text" id="title" name="title">
+        <br>
+        <label for="year">Year</label>
+        <br>
+        <input type="text" id="year" name="year">
+        <br>
+        <label for="artist">Artist</label>
+        <br>
+        <input type="text" id="artist" name="artist">
+        <br>
+        <button name="query" type="submit">Find</button>
+    </form>
+    <table>
+        <tr>
+            <th>Picture</th>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Subcribe</th>
+        </tr>
+        <h1>{{ mess }}</h1>
+        {% for song in songs %}
+            <tr>
+                <td id="testing">
+                    <img class="song-image" src="{{ img }}" id="{{ song.artist }}"  />
+                </td>
+                <td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
+                <td>{{ song.title }}</td>
+                <td>
+                    <form method = "POST">
+                        {% csrf_token %}
+                        <button type="submit"
+                                name="song"
+                                value='{ "title": "{{ song.title }}", "year": "{{ song.year }}" }'>Subcribe</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
-
-
-{% block feature %}
-{{ block.super }}
-
-{% endblock %}
+{% block feature %}{% endblock %}

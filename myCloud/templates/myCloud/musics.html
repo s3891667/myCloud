@@ -19,7 +19,9 @@
                 <td>
                     <form method = "POST">
                         {% csrf_token %}
-                        <button type="submit" name="song" value='{{ song.title }}'>Subcribe</button>
+                        <button type="submit"
+                                name="song"
+                                value='{ "title": "{{ song.title }}", "year": "{{ song.year }}" }'>Subcribe</button>
                     </form>
                 </td>
             </tr>
@@ -101,8 +103,6 @@
 				.catch(error => console.error(error));
 		});
 	}
-	document.addEventListener('DOMContentLoaded', () => {
-		fetchImg();
-	});
+	window.onload = fetchImg()
     </script>
 {% endblock %}
