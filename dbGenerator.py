@@ -15,6 +15,7 @@ data = json.loads(file.read())
 
 
 def create_table(songs):
+    '''This function will fisrt create a table for the musics'''
     client = boto3.client('dynamodb')
     table_creation_resp = client.create_table(
         TableName='music',
@@ -41,6 +42,7 @@ def create_table(songs):
 
 
 def createItem(songs):
+    '''This loops through the music list then add song to the database'''
     client = boto3.resource('dynamodb', region_name='us-east-1')
     table_name = 'music'
     table = client.Table(table_name)
@@ -58,22 +60,9 @@ def createItem(songs):
 
 # createItem(songs)
 
-# for value in songs:
-    # print(value['artist'])
-
-song = "#40"
-formatted_string = f":{song}"
-print(formatted_string)
-
-# if (type(string1) == str):
-# print("yess")
-# if string1 != string2:
-# print("The strings are not equal")
-# else:
-# print("The strings are equal")
-
 
 def download(songs):
+    '''Downloading all the songs from link in the a1.json file'''
     folder_path = "./musicImgs"
     for i in range(len(songs)):
         print(i)
@@ -88,6 +77,7 @@ def download(songs):
 
 
 def uploadingFiles(songs):
+    '''Uploading those file to the s3 bucket '''
     s3_client = boto3.client('s3')
     bucket = 'myartistbucket'
     folder_path = './musicImgs/'

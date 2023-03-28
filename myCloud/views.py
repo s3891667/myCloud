@@ -11,8 +11,9 @@ load_dotenv()
 
 
 def restructureData(songs, names):
+    '''This function will generate a list based on the format of Django 
+    pagination from songs dictionary and songs' names list'''
     final_data = []
-    print(len(songs))
     for i in range(len(songs)):
         tmp_data = {
         }
@@ -25,6 +26,7 @@ def restructureData(songs, names):
 
 
 def apiGateWay(email, password):
+    '''Calling the api to login and get Session for user '''
     url = 'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/rmit/?student=' + email
     headers = {
         "Content-Type": "application/json"}
@@ -40,6 +42,7 @@ def apiGateWay(email, password):
 
 
 def index(request):
+    '''Index page view'''
     if 'user' in request.session:
         return redirect('home/')
     else:
@@ -47,6 +50,7 @@ def index(request):
 
 
 def login(request):
+    '''Login page view'''
     if 'user' in request.session:
         return redirect('/myCloud/home/')
     if request.method == 'POST':
@@ -64,6 +68,7 @@ def login(request):
 
 
 def signUp(request):
+    '''Signup page view'''
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
         email = request.POST.get('email')
@@ -82,6 +87,7 @@ def signUp(request):
 
 
 def home(request):
+    '''Home page view'''
     if 'user' not in request.session:
         return redirect('/myCloud/')
     else:
@@ -90,6 +96,7 @@ def home(request):
 
 
 def logout(request):
+    '''Logout'''
     try:
         request.session.flush()
     except:
@@ -98,6 +105,7 @@ def logout(request):
 
 
 def addingSong(data, user_email):
+    '''Function that trigger API to add song to subscription list for the user'''
     title = data['title']
     year = data['year']
     url = 'https://qd7wgwpns8.execute-api.us-east-1.amazonaws.com/updateSubscription/'
@@ -111,8 +119,9 @@ def addingSong(data, user_email):
 
 
 def musics(request):
-    # this area will display everything, such as images and its information
-    # User will allow to subscribe the the music thereby I will display in their section
+    '''Function calling API to retrieve music from the music table
+    Instead of searching from the query section the user can view everything and 
+    select subscribe'''
 
     if 'user' not in request.session:
         return redirect('/myCloud/login')
@@ -137,9 +146,11 @@ def musics(request):
 
 
 def subscription(request):
+    '''Subscription view'''
     if 'user' not in request.session:
         return redirect('/myCloud/login/')
     if request.method == 'POST':
+        # Removing songs
         song_title = json.loads(request.POST.get('song'))['title']
         user_email = request.session['user_email']
         url = 'https://u1gz12fny5.execute-api.us-east-1.amazonaws.com/removeSong/'
@@ -158,7 +169,8 @@ def subscription(request):
     parse_json = json.loads(data)
     subscription = parse_json[0]['subscription']
     final_data = restructureData(subscription, list(subscription))
-
+    # After fetching for all the in the subscription section of the user and parse it to final_data,
+    # Django paginator will display it
     paginator = Paginator(final_data, 10)
     page_number = request.GET.get('page')
     page_object = paginator.get_page(page_number)
@@ -170,10 +182,12 @@ def subscription(request):
 
 
 def query(request):
+    '''Query view'''
     if 'user' not in request.session:
         return redirect('/myCloud/login/')
     current_user = request.session['user']
     if request.method == 'POST':
+        # When the user is press the query button
         if 'query' in request.POST:
             title = request.POST.get('title')
             year = request.POST.get('year')
@@ -188,6 +202,7 @@ def query(request):
 
             value = response.text
             song = (json.loads(value)['body'])
+            # If the song is valid it will return a list
             if (type(song) == list):
                 artist_retrieved = song[0]['artist']
                 img_url = f'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist={artist_retrieved}'
@@ -197,16 +212,16 @@ def query(request):
                     "songs": song,
                     "img": img.text
                 })
+            # else only return a message that the song does not exist
             return render(request, "myCloud/query.html", {
                 "current_user": current_user,
                 "mess": song
             })
-
+        # When the user press subscribe
         else:
             data = json.loads(request.POST.get('song'))
             user_email = request.session['user_email']
             response_data = addingSong(data, user_email)
-            print(response_data)
             return render(request, "myCloud/query.html", {
                 "current_user": current_user,
                 "mess": json.loads(response_data.text)['body']
