@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-   
-        <link type="text/css"  rel="stylesheet" href="/static/css/style.css">
+        {% load static %}
+
+        <link type="text/css"  rel="stylesheet" href="{% static 'myCloud/style.css' %}">
     </head>
     <body>
         <nav>

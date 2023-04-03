@@ -21,6 +21,7 @@
             <th>Picture</th>
             <th>Artist</th>
             <th>Title</th>
+            <th>Year </th>	 
             <th>Subcribe</th>
         </tr>
         <h1>{{ mess }}</h1>
@@ -31,6 +32,7 @@
                 </td>
                 <td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
                 <td>{{ song.title }}</td>
+                <td>{{ song.year }}</td>
                 <td>
                     <form method = "POST">
                         {% csrf_token %}
