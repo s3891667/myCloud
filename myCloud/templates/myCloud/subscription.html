@@ -28,4 +28,46 @@
         {% endfor %}
     </table>
 {% endblock %}
-{% block feature %}{{ block.super }}{% endblock %}
+{% block feature %}
+    <script>
+	async function fetchImg() {
+		const images = document.querySelectorAll('.song-image');
+		images.forEach(image => {
+			const title = image.getAttribute('id');
+			const url = `https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist=${encodeURIComponent(title)}`;
+			fetch(url, { mode: 'cors' })
+				.then(response => {
+					if (response.ok) {
+						return response.body;
+					}
+					throw new Error('Network response was not ok');
+				})
+				.then(body => {
+					const reader = body.getReader();
+					const stream = new ReadableStream({
+						start(controller) {
+							function push() {
+								reader.read().then(({ done, value }) => {
+									if (done) {
+										controller.close();
+										return;
+									}
+									controller.enqueue(value);
+									push();
+								});
+							}
+							push();
+						}
+					});
+					return new Response(stream, { headers: { "Content-Type": "text/html" } })
+						.text();
+				})
+				.then(url => {
+					image.src = url;
+				})
+				.catch(error => console.error(error));
+		});
+	}
+	window.onload = fetchImg()
+    </script>
+{% endblock %}

@@ -168,6 +168,7 @@ def subscription(request):
     data = response.text
     parse_json = json.loads(data)
     subscription = parse_json[0]['subscription']
+    print(subscription)
     final_data = restructureData(subscription, list(subscription))
     # After fetching for all the in the subscription section of the user and parse it to final_data,
     # Django paginator will display it
