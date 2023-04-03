@@ -88,39 +88,3 @@ def uploadingFiles(songs):
 
 
 # uploadingFiles(songs)
-
-
-def lambda_handler(event, context):
-    client = boto3.client('dynamodb', region_name='us-east-1')
-    title = "#40"
-    year = ""
-    artist = ""
-    dataList = {'title': title, 'year': year, 'artist': artist}
-    queryData = {}
-    for key, value in dataList.items():
-        if(value):
-            queryData[key] = {
-                'AttributeValueList': [{
-                    'S': value
-                }],
-                'ComparisonOperator': 'EQ'
-            }
-
-    response = client.scan(TableName='music', ScanFilter=queryData)
-    if(response['Items']):
-        return {
-            'body': [
-                {
-                    # remove the data type prefix
-                    key: value[list(value.keys())[0]]
-                    for key, value in item.items()
-                }
-                for item in response['Items']
-            ]
-        }
-    return{
-        'body': 'Error'
-    }
-
-
-print(lambda_handler({}, {}))

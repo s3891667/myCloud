@@ -28,7 +28,7 @@
         {% for song in songs %}
             <tr>
                 <td id="testing">
-                    <img class="song-image" src="{{ img }}" id="{{ song.artist }}"  />
+                    <img class="song-image" src="{{ song.img_url }}" id="{{ song.artist }}"  />
                 </td>
                 <td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
                 <td>{{ song.title }}</td>

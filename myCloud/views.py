@@ -201,16 +201,17 @@ def query(request):
             response = requests.post(url, json=data)
 
             value = response.text
-            song = (json.loads(value)['body'])
+            song = json.loads(value)['body']
+
             # If the song is valid it will return a list
             if (type(song) == list):
-                artist_retrieved = song[0]['artist']
-                img_url = f'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/getSongs/subscribe?artist={artist_retrieved}'
-                img = requests.get(img_url)
+
+                paginator = Paginator(song, 50)
+                page_number = request.GET.get('page')
+                page_object = paginator.get_page(page_number)
                 return render(request, "myCloud/query.html", {
                     "current_user": current_user,
-                    "songs": song,
-                    "img": img.text
+                    "songs": page_object,
                 })
             # else only return a message that the song does not exist
             return render(request, "myCloud/query.html", {
