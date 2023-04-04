@@ -88,3 +88,29 @@ def uploadingFiles(songs):
 
 
 # uploadingFiles(songs)
+
+
+def creatingAccount():
+    passwordlist = "0123456789"
+    slice_size = 1
+    for num in range(0, 10):
+        email = 's3891667'+str(num)+'@student.rmit.edu.au'
+        data = {
+            "cloudUser": email,
+            "email": email,
+            "user_name": 'KhoaNguyen'+str(num),
+        }
+        j = num+6
+        if(j <= len(passwordlist)):
+            data["password"] = passwordlist[num:j]
+            j += 1
+        else:
+            pw = passwordlist[num:]+passwordlist[0:slice_size]
+            slice_size += 1
+            data["password"] = pw
+
+        url = 'https://xwjymmmd28.execute-api.us-east-1.amazonaws.com/signup/createaccount'
+        response = requests.post(url, json=data)
+
+
+# creatingAccount()
