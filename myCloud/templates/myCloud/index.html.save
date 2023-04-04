@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+
+        <link type="text/css"  rel="stylesheet" href="{% static 'myCloud/style.css' %}">
+    </head>
+    <body>
+        <nav>
+            <div class="nav-link" id="navlink">
+                <ul>
+                    <li class="nav-button">
+                        <a href="{% url 'myCloud:home' %}">MyCloud</a>
+                    </li>
+                    {% if current_user %}
+                        <li>
+                            <a href="{% url 'myCloud:musics' %}">Musics</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'myCloud:subscription' %}">Subscription</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'myCloud:query' %}">Query</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'myCloud:logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'myCloud:login' %}">Login</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'myCloud:signUp' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        {% block content %}<h1>Welcome to MyCloud</h1>{% endblock %}
+    </body>
+    {% block feature %}{% endblock %}
+</html>

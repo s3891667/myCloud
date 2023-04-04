@@ -1,0 +1,66 @@
+{% extends 'myCloud/index.html' %}
+{% block content %}
+    <h1>Songs List</h1>
+    <h1>{{ bucket }}</h1>
+    <table>
+        <tr>
+            <th>Picture</th>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Subcribe</th>
+        </tr>
+        {% for song in songs %}
+            <tr>
+                <td id="testing">
+                    <img class="song-image" src="{{ song.img_url }}" id="{{ song.artist }}"  />
+                </td>
+                <td id="artist"  value="{{ song.artist }}">{{ song.artist }}</td>
+                <td>{{ song.title }}</td>
+                <td>
+                    <form method = "POST">
+                        {% csrf_token %}
+                        <button type="submit"
+                                name="song"
+                                value='{ "title": "{{ song.title }}", "year": "{{ song.year }}" }'>Subcribe</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <nav>
+        <ul >
+            <li >
+                <a onclick="" href="?page=1">First</a>
+            </li>
+            <li >
+                {% if songs.has_previous %}
+                    <a onclick=""
+                       href="?page={{ songs.previous_page_number }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                {% endif %}
+            </li>
+            {% for i in songs.paginator.page_range %}
+                <li >
+                    <a onclick=""  href="?page={{i}}">{{i }}</a>
+                </li>
+            {% endfor %}
+            <li >
+                {% if songs.has_next %}
+                    <a onclick=""
+                       href="?page={{ songs.next_page_number }}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                {% endif %}
+            </li>
+            <li>
+                <a onclick="" href="?page={{ songs.paginator.num_pages }}">Last</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+{% block feature %}{% endblock %}

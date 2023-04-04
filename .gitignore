@@ -1,0 +1,8 @@
+.env
+myCloudEnv
+mydatabase
+.DJANGO_SECRET_KEY
+musicImgs
+a1.json
+static
+config
