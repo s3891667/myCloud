@@ -1,6 +1,8 @@
 # myCloud
 ## Project structure
 
+```
+.
 ├── cloudApp
 │   ├── asgi.py
 │   ├── __init__.py
@@ -39,6 +41,9 @@
 ├── README.md
 ├── requirements.in
 └── requirements.txt
+
+
+```
 
 ## Overview
 MyCloud is built using Django back-end, which interacts with AWS services, such as E2E, DyanmoDB,
