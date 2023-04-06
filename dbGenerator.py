@@ -91,6 +91,7 @@ def uploadingFiles(songs):
 
 
 def creatingAccount():
+    '''Function allows me to create 10 account to the DynamoDB'''
     passwordlist = "0123456789"
     slice_size = 1
     for num in range(0, 10):

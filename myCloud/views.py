@@ -96,8 +96,9 @@ def home(request):
 
 
 def logout(request):
-    '''Logout'''
+    '''Logout feature'''
     try:
+        # This will delete the session values
         request.session.flush()
     except:
         return redirect('/login/')
@@ -122,7 +123,8 @@ def musics(request):
     '''Function calling API to retrieve music from the music table
     Instead of searching from the query section the user can view everything and 
     select subscribe'''
-
+    # Note that this is my additional feature; However, the hosted website got errors,
+    # So this can be ignored
     if 'user' not in request.session:
         return redirect('/myCloud/login')
     else:
@@ -168,7 +170,7 @@ def subscription(request):
     data = response.text
     parse_json = json.loads(data)
     subscription = parse_json[0]['subscription']
-    print(subscription)
+    # Restructuring the fetched values to create a list of json variables
     final_data = restructureData(subscription, list(subscription))
     # After fetching for all the in the subscription section of the user and parse it to final_data,
     # Django paginator will display it
@@ -206,9 +208,9 @@ def query(request):
 
             # If the song is valid it will return a list
             if (type(song) == list):
-
                 paginator = Paginator(song, 50)
                 page_number = request.GET.get('page')
+                # using Django paginator to display data into to front-end
                 page_object = paginator.get_page(page_number)
                 return render(request, "myCloud/query.html", {
                     "current_user": current_user,
